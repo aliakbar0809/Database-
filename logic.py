@@ -60,3 +60,27 @@ async def update_task(db: DatabaseConfig,
             print('Task updated!')
     except Exception as e:
         print('Error:', e)
+
+async def delete_task(db:DatabaseConfig, task_id:int):
+    try:
+        async with db.pool.acquire() as conn:
+            await conn.execute("""
+    DELETE FROM todos WHERE id=$1
+""", int(task_id))
+        print('Task deleted!')
+
+    except Exception as e:
+        print('Error:',e)  
+
+
+
+async def get_task_by_id(db:DatabaseConfig, task_id:int):
+    try:
+        async with db.pool.acquire() as conn:
+            await conn.execute("""
+    SELECT * FROM todos WHERE id=$1
+""", int(task_id))
+            
+    except Exception as e:
+        print('Error',e)
+

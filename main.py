@@ -1,6 +1,6 @@
 import asyncio
 
-from logic import registration, login, create_task, get_tasks, update_task
+from logic import registration, login, create_task, get_tasks, update_task,delete_task,get_task_by_id
 from database import DatabaseConfig
 
 login_status = False
@@ -61,9 +61,22 @@ async def main():
                     description = input('Enter your new description: ')
                     await update_task(db, task_id, title, description)
 
+                elif choice == '4':
+                    task_id = input('Enter task id: ')
+                    await delete_task(db, task_id)
+                    print('Task deleted!')
+
                 elif choice == '5':
                     print('You logged out!')
                     login_status = False
+
+                elif choice == '6':
+                    task_id = input('Enter task id: ')
+                    task = await get_task_by_id(db, task_id)
+                if task:
+                    print(f'Task found: {task['title']} - {task['description']}')
+                else:
+                    print('Task not found!')
 
 if __name__ == '__main__':
     asyncio.run(main())
